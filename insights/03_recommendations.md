@@ -11,7 +11,7 @@
    - Add proactive customer communication for delayed shipments.
 
 3. Optimize Checkout Experience
-   - Although not the primary issue, payment failure rates remain elevated.
+   - Although not the primary driver of revenue decline, payment failures should still be optimized to prevent compounding losses.
    - Introduce payment retries, fallback gateways, and simplified OTP flows.
 
 4. Monitoring & Alerting
