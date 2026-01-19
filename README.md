@@ -1,5 +1,15 @@
 # Diagnosing Revenue Decline in an E-commerce Platform
 
+
+## Executive Summary
+
+The platform experienced a revenue decline despite stable traffic and consistent average order value (AOV). A step-by-step funnel analysis revealed that the decline was not driven by pricing, customer demand, or payment gateway failures.
+
+The primary cause of revenue loss was identified as post-payment fulfillment failure. Approximately 20–30% of successfully paid orders failed to convert into realized revenue due to non-delivery and returns. Further breakdown showed that returns were the dominant contributor to revenue leakage, followed by pre-delivery cancellations.
+
+This indicates that operational and fulfillment inefficiencies, rather than demand-side or monetization issues, are the key drivers of revenue decline.
+
+
 ## Business Context
 The e-commerce platform has observed a decline in overall revenue over the past few months, despite stable website traffic and increased marketing spend.
 
