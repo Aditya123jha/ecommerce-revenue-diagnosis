@@ -1,150 +1,314 @@
 # Diagnosing Revenue Decline in an E-commerce Platform
+## Key Finding
+Revenue decline was **not caused by falling demand, pricing issues, or payment failures**.
 
+Instead, **25.1% of all paid revenue (₹1,23,218)** never converted into realized revenue because of post-payment fulfillment failures:
 
-## Executive Summary
+- **Product Returns:** ₹70,959 (57.6% of leakage)
+- **Stuck Orders:** ₹52,259 (42.4% of leakage)
 
-The platform experienced a revenue decline despite stable traffic and consistent average order value (AOV). A step-by-step funnel analysis revealed that the decline was not driven by pricing, customer demand, or payment gateway failures.
+The biggest opportunity is improving fulfillment efficiency and reducing return-related leakage.
 
-The primary cause of revenue loss was identified as post-payment fulfillment failure. Approximately 20–30% of successfully paid orders failed to convert into realized revenue due to non-delivery and returns. Further breakdown showed that returns were the dominant contributor to revenue leakage followed by pre-delivery cancellations.
+# Executive Summary
 
-This indicates that operational and fulfillment inefficiencies, rather than demand-side or monetization issues, are the key drivers of revenue decline.
+The platform collected **₹4,91,863** in payments during the analysis period, but only **₹3,68,645** became realized revenue.
 
+That means:
 
-## Business Context
-The e-commerce platform has observed a decline in overall revenue over the past few months, despite stable website traffic and increased marketing spend.
+- **₹1,23,218 leaked**
+- Nearly **1 in every 4 rupees paid was lost**
+- Leakage happened **after payment**, not before it
 
-This disconnect between traffic and revenue suggests potential issues beyond user acquisition, such as conversion efficiency, pricing strategy, customer behavior, or operational performance.
+A structured funnel analysis ruled out:
 
-Senior leadership wants to understand:
-- Why revenue is falling  
-- Which factors are driving the decline  
-- What data-backed actions can reverse the trend  
+- Demand-side decline
+- AOV deterioration
+- Pricing problems
+- Payment infrastructure instability
 
+The root cause is operational:
 
-## Project Objective
-The objective of this project is to:
-- Diagnose the root causes of revenue decline using data  
-- Test structured business hypotheses instead of making assumptions  
-- Provide actionable recommendations to improve revenue performance  
+ Customers are successfully paying, but orders are either getting returned or never reaching successful fulfillment.
 
-This project is approached from a **Business Analyst / Data Analyst perspective**, focusing on **decision-making and business impact rather than only reporting**.
+# Business Context
 
+The e-commerce platform experienced a steady revenue decline over an **8-month period (Feb–Sep 2024)** despite:
 
-## Key Metrics Considered
-Revenue in e-commerce is influenced by multiple levers. This analysis focuses on the following core metrics:
+- Stable website traffic
+- Consistent marketing spend
 
-- Revenue  
-- Number of Orders  
-- Conversion Rate  
-- Average Order Value (AOV)  
-- Repeat Customer Rate  
-- Return Rate  
-- Category-wise Revenue Contribution  
-- Payment Success Rate  
+Leadership wanted to understand:
 
-Each metric is analyzed across relevant dimensions such as **time, customer type, category, and payment method** to identify hidden drivers.
+- Why revenue was declining
+- Which operational drivers were responsible
+- What measurable actions could reverse the trend
 
+This project approaches the problem from a **Business Analyst / Data Analyst perspective**, focusing on:
 
-## E-commerce Funnel Considered
-Although full traffic data may not always be available, the analysis is framed around a standard e-commerce funnel:
+- Hypothesis-driven investigation
+- Revenue impact quantification
+- Actionable business recommendations
 
-1. Visit  
-2. Add to Cart  
-3. Checkout  
-4. Payment Success  
-5. Order Delivered  
+# Key Metrics Analyzed
 
-Revenue leakage can occur at multiple stages, especially during checkout, payment, and post-purchase (returns).
+| Metric | Value | Insight |
+|---|---|---|
+| Total Paid Revenue | ₹4,91,863 | Baseline |
+| Realized Revenue | ₹3,68,645 | Only 75% realized |
+| Revenue Leakage | ₹1,23,218 | 25.1% leakage |
+| Return Rate | 12.2% overall | Electronics highest at 14.5% |
+| Payment Failure Rate | 10.2% | Secondary issue |
+| Discounted Order Return Rate | 17.0% | vs 10.4% non-discounted |
 
+# E-commerce Funnel Analysis
 
-## Hypothesis-Driven Analysis
-Instead of jumping to conclusions, this project follows a **hypothesis-driven approach**. Each hypothesis is validated or rejected using SQL and Python analysis.
+```text
+Visit → Add to Cart → Checkout → Payment Success → Delivered
+                                      ↓                 ↓
+                               10.2% fail         25.1% leak
+                                (₹52,171)         (₹1,23,218)
+```
 
+## Critical Insight
 
-### Hypothesis 1: Conversion Rate Decline
-Revenue declined because fewer visitors converted into completed orders despite stable traffic.
+Revenue leakage is concentrated **after payment**:
 
-- **Metric:** Conversion Rate  
-- **Dimensions:** Month-over-month, funnel stage (checkout → payment)  
-- **Validation Logic:**  
-  A significant drop in conversion rate over time would support this hypothesis.
+- Orders are successfully placed
+- Customers are paying
+- But fulfillment breaks down afterward
 
+This confirms the issue is operational, not acquisition-related.
 
-### Hypothesis 2: Average Order Value (AOV) Decrease
-Revenue declined due to a reduction in average order value caused by pricing or discounting strategies.
+# Hypothesis-Driven Analysis
 
-- **Metric:** Average Order Value (AOV)  
-- **Dimensions:** Time, customer type (new vs repeat), discount usage  
-- **Validation Logic:**  
-  If AOV declines primarily in discounted or new-user orders, this hypothesis is supported.
+## Hypothesis 1: Conversion Rate Decline
 
+### Verdict: Not the primary driver
 
-### Hypothesis 3: Decline in Repeat Customer Contribution
-Repeat customers, though a smaller share of users, often contribute a disproportionate share of revenue. A decline in repeat purchases could significantly impact overall revenue.
+- Order volume remained stable
+- No major checkout drop-offs observed
+- Paying customer acquisition remained healthy
 
-- **Metric:** Repeat order rate, repeat revenue share  
-- **Dimensions:** Month, customer type  
-- **Validation Logic:**  
-  A noticeable drop in repeat revenue contribution would confirm this hypothesis.
+### Conclusion
 
+The platform is still generating paying customers — the issue is retaining revenue after payment.
 
-### Hypothesis 4: Increase in Product Returns
-Net revenue declined due to an increase in product returns, potentially driven by quality issues, category-specific problems, or aggressive discounting.
+## Hypothesis 2: Average Order Value (AOV) Decrease
 
-- **Metric:** Return Rate  
-- **Dimensions:** Category, time, discount flag  
-- **Validation Logic:**  
-  A sharp rise in return rates in specific categories would support this hypothesis.
+### Verdict: Not supported
 
+- AOV ranged between **₹2,278–₹3,282**
+- No sustained downward trend observed
 
-### Hypothesis 5: Category Mix Shift Toward Low-Value Products
-Revenue declined because customer purchasing behavior shifted toward lower-priced or lower-margin categories.
+### Conclusion
 
-- **Metric:** Revenue contribution by category  
-- **Dimensions:** Category, month  
-- **Validation Logic:**  
-  If high-value categories lose revenue share while low-value categories gain share, this hypothesis is validated.
+Customers were not spending less.
 
+Revenue fluctuations were driven by leakage, not basket size.
 
-### Hypothesis 6: Checkout or Payment Failures
-Revenue declined due to increased checkout drop-offs or payment failures, especially across specific payment methods.
+## Hypothesis 3: Decline in Repeat Customer Contribution
 
-- **Metric:** Payment Success Rate  
-- **Dimensions:** Payment method, time  
-- **Validation Logic:**  
-  An increase in payment failures over time would confirm this hypothesis.
+### Verdict: Contributing factor, not root cause
 
+A small subset of customers contributed disproportionately:
 
-## Analytical Approach
-The analysis was approached in the same way a real-world business problem is handled.
+- User 63 → 5 orders
+- User 29 → 4 orders
 
-The work began with high-level revenue and order trends to confirm that traffic was not the primary issue. From there, the focus shifted to identifying potential revenue leakage across conversion, pricing, customer behavior, and post-purchase stages.
+### Insight
 
-Each potential cause was framed as a testable hypothesis and validated using targeted SQL and Python analysis. Rather than analyzing all metrics simultaneously, the approach focused on isolating one driver at a time and validating it with data before moving forward.
+High-frequency buyer churn could disproportionately impact revenue.
 
-Insights were then translated into clear business implications and recommendations rather than only visual outputs.
+However, this is still secondary compared to fulfillment leakage.
 
+## Hypothesis 4: Increase in Product Returns
 
-## Tools and Technologies
-- **SQL (PostgreSQL):** Data extraction, joins, window functions, hypothesis testing  
-- **Python (Pandas, Matplotlib):** Exploratory analysis and cohort analysis  
-- **Power BI:** Stakeholder-friendly dashboards  
-- **GitHub:** Version control and documentation  
+### Verdict: PRIMARY DRIVER
 
+Returns accounted for:
 
-## Expected Outcome
-By the end of this project, the analysis aims to:
-- Identify the primary drivers of revenue decline  
-- Quantify the impact of each driver  
-- Recommend targeted, data-backed actions such as:
-  - Improving checkout and payment success  
-  - Optimizing discount strategy  
-  - Re-engaging repeat customers  
-  - Fixing high-return categories  
+- **₹70,959 lost revenue**
+- **57.6% of total leakage**
 
+## Return Leakage by Category
 
-## Why This Project Matters
+| Category | Return Rate | Revenue Lost | Share of Return Leakage |
+|---|---|---|---|
+| Electronics | 14.5% | ₹27,015 | 38.1% |
+| Fashion | 11.3% | ₹20,451 | 28.8% |
+| Beauty | 11.9% | ₹14,060 | 19.8% |
+| Home | 11.8% | ₹9,433 | 13.3% |
+
+### Key Insight
+
+Electronics + Fashion together contributed:
+
+- **66.9% of return-related revenue loss**
+
+## Discount Compounding Effect
+
+| Order Type | Return Rate |
+|---|---|
+| Discounted Orders | 17.0% |
+| Non-Discounted Orders | 10.4% |
+
+Discounted orders had a **63% higher return rate**, indicating that aggressive discounting is increasing low-quality purchases and return volume.
+
+## Hypothesis 5: Category Mix Shift Toward Low-Value Products
+
+### Verdict: Partially supported
+
+No major category shift occurred.
+
+However:
+
+- Electronics had both:
+  - Highest AOV
+  - Highest return rate
+
+This created a compounding effect where high-value failed orders disproportionately damaged realized revenue.
+
+## Hypothesis 6: Checkout or Payment Failures
+
+### Verdict: Secondary contributor
+
+- 21 failed payment orders
+- ₹52,171 lost before entering fulfillment
+
+### Important Observation
+
+Failures were not concentrated in one payment method.
+
+This suggests:
+
+- Systemic checkout reliability issues
+- Possible UX friction during payment completion
+
+Not a gateway-specific problem.
+
+# Monthly Trend Insight
+
+Revenue leakage persisted across all 8 months.
+
+This confirms the problem is:
+
+- Structural
+- Operational
+- Recurring
+
+Not a temporary spike.
+
+August generated the highest paid revenue (**₹70,110**) but still suffered heavy leakage, proving that increasing order volume alone will not solve profitability problems without operational fixes.
+
+# Actionable Recommendations
+
+## 1. Reduce Electronics Return Rate (Highest ROI)
+
+### Problem
+
+- Electronics return rate: **14.5%**
+- Revenue leakage: **₹27,015**
+
+Largest contributor to overall losses.
+
+### Recommended Actions
+
+- Add detailed specification sheets
+- Improve compatibility guidance
+- Add verified buyer Q&A
+- Introduce pre-dispatch quality checks for high-value orders (>₹3,000)
+
+### Expected Impact
+
+Reducing return rate from:
+
+14.5% → 10.5%
+
+could recover approximately:
+
+- **₹7,400/month**
+
+## 2. Restructure Discount Strategy
+
+### Problem
+
+Discounts are subsidizing purchases that later get returned.
+
+### Recommended Actions
+
+- Replace blanket discounts with category-specific offers
+- Restrict discounts to low-return categories
+- Introduce “discount lock” policies for repeat returners
+
+### Expected Impact
+
+Matching discounted-order return rate to non-discounted levels could prevent:
+
+- **₹9,800/year in leakage**
+
+## 3. Resolve Stuck Orders
+
+### Problem
+
+- 22 stuck orders
+- ₹52,259 trapped in fulfillment limbo
+
+### Recommended Actions
+
+- SLA alert if order not shipped within 48 hours
+- Proactive customer communication after 72 hours
+- Investigate warehouse/category clustering
+
+### Expected Impact
+
+- Immediate recovery: **₹52,259**
+- Long-term realized revenue improvement toward **85%+**
+
+## 4. Reduce Payment Failure Rate
+
+### Problem
+
+- Payment failure rate: **10.2%**
+- Industry benchmark: **3–5%**
+
+### Recommended Actions
+
+- Introduce payment retry flows
+- Offer alternate payment method suggestions
+- Audit checkout UX friction points
+
+### Expected Impact
+
+- 15% payment recovery could recover:
+  - **₹7,826**
+- Reaching industry benchmark could add:
+  - **₹26,000+ annually**
+
+# Combined Recovery Potential
+
+| Action | Estimated Recovery |
+|---|---|
+| Reduce Electronics Return Rate | ₹7,400/month |
+| Fix Discount-Driven Returns | ₹9,800/year |
+| Resolve Stuck Orders | ₹52,259 + structural gains |
+| Payment Retry Flow | ₹7,826/cycle |
+| Total Addressable Leakage | ₹1,23,218 |
+
+# Tools & Technologies
+
+- **SQL (PostgreSQL)** → Data extraction, CTEs, hypothesis testing
+- **Python (Pandas, Matplotlib)** → EDA & visualization
+- **Power BI** → Stakeholder dashboarding
+- **GitHub** → Documentation & version control
+
+# Why This Project Matters
+
 This project demonstrates:
-- Structured problem-solving under ambiguity  
-- Strong business and analytical thinking  
-- Ability to translate data into decisions  
+
+- Structured hypothesis-driven business analysis
+- Revenue-focused decision-making
+- Ability to quantify business impact in ₹ terms
+- Executive-level communication
+- End-to-end ownership from raw data to recommendations
+
+It focuses not just on identifying problems — but on prioritizing the highest-leverage business actions to recover revenue efficiently.
